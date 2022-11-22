@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+logs
 
 # BlueJ files
 *.ctxt
@@ -12,7 +13,6 @@
 
 # Project settings
 .idea
-logs
 
 # Package Files #
 *.jar

@@ -2,7 +2,7 @@ package com.navumchyk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication(scanBasePackages = "com.navumchyk")
@@ -11,6 +11,10 @@ public class ApplicationStarter {
 
     public static void main(String[] args) {
 
-        ConfigurableApplicationContext run = SpringApplication.run(ApplicationStarter.class, args);
+        ApplicationContext applicationContext = SpringApplication.run(ApplicationStarter.class, args);
+
+        ATM atm = applicationContext.getBean(ATM.class);
+
+        atm.start();
     }
 }

@@ -1,9 +1,11 @@
 package com.navumchyk.security.impl;
 
 import com.navumchyk.Exitable;
+import com.navumchyk.ShutDownable;
 import com.navumchyk.config.ConsoleReader;
 import com.navumchyk.domain.Card;
 import com.navumchyk.exception.InvalidlyCardDataException;
+import com.navumchyk.exception.ShutDownException;
 import com.navumchyk.security.SecurityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,7 @@ import static com.navumchyk.util.LoggerUtil.showWarnMessageAndMakeDelay;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SecurityManagerImpl implements SecurityManager, Exitable {
+public class SecurityManagerImpl implements SecurityManager, Exitable, ShutDownable {
 
     private final ConsoleReader reader;
 
@@ -41,6 +43,10 @@ public class SecurityManagerImpl implements SecurityManager, Exitable {
 
             if (isExitChoice(cardNumber)) {
                 break;
+            }
+
+            if (isShutDownChoice(cardNumber)) {
+                throw new ShutDownException();
             }
 
             if (checkCardNumberFormat(cardNumber)) {

@@ -60,6 +60,9 @@ public class DatabaseLoader {
                 card = entry.getValue();
                 writer.write(card.toString() + '\n');
             }
+
+            log.warn("Database uploaded successfully!");
+
         } catch (IOException e) {
             log.error("Database not uploaded: " + e.getMessage());
         }

@@ -3,11 +3,12 @@ package com.navumchyk.atm.util;
 import com.navumchyk.domain.Card;
 import com.navumchyk.exception.DataLoadingError;
 import com.navumchyk.security.SecurityManagerOperations;
-import com.navumchyk.service.ServiceManagerConstraints;
 
 import java.time.LocalDate;
 
-public class CardParser implements SecurityManagerOperations, ServiceManagerConstraints {
+public class CardParser implements SecurityManagerOperations {
+
+    private static final String BALANCE_PATTERN = "^-?\\d{1,9}$";
 
     private CardParser() {
     }
@@ -29,7 +30,7 @@ public class CardParser implements SecurityManagerOperations, ServiceManagerCons
             throw new DataLoadingError("Pin cod does not match the format \"dddd\"");
         }
 
-        if (!cardArgs[2].matches(MONEY_LIMIT_PATTERN)) {
+        if (!cardArgs[2].matches(BALANCE_PATTERN)) {
             throw new DataLoadingError("Amount not allowed");
         }
 

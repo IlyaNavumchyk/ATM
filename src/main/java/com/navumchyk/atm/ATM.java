@@ -4,6 +4,7 @@ import com.navumchyk.Exitable;
 import com.navumchyk.config.ATMConfig;
 import com.navumchyk.domain.Card;
 import com.navumchyk.exception.InvalidlyCardDataException;
+import com.navumchyk.exception.ShutDownException;
 import com.navumchyk.security.SecurityManager;
 import com.navumchyk.service.ServiceManager;
 import lombok.Data;
@@ -35,9 +36,6 @@ public class ATM implements Exitable {
 
     public void start() {
 
-        isAtmWork = true;
-        log.warn("ATM has started working!");
-
         Card card;
         String userChoice;
 
@@ -67,6 +65,9 @@ public class ATM implements Exitable {
             } catch (InvalidlyCardDataException e) {
                 log.error(e.getMessage());
                 makeDelayOfTwoSeconds();
+            } catch (ShutDownException e) {
+                log.warn("ATM shutdown selected!");
+                isAtmWork = false;
             } catch (Exception e) {
                 log.error(getErrorMessage(e));
             }
@@ -77,15 +78,19 @@ public class ATM implements Exitable {
 
     @PostConstruct
     private void init() {
+
         atmBalance = config.getBalance();
+        isAtmWork = true;
         loadDataFromFileToDatabase(database, config.getFileName());
+        log.warn("ATM has started working!");
     }
 
     @PreDestroy
     private void shutdown() {
 
         loadDataFromDatabaseToFile(database, config.getFileName());
-        log.warn("Database uploaded successfully!");
+        log.warn("ATM has finished working!");
+
     }
 
     private void getFinishMessage() {

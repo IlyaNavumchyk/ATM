@@ -6,7 +6,7 @@
 
     <groupId>com.navumchyk</groupId>
     <artifactId>ATM</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <developers>
         <developer>
             <name>Ilya Navumchyk</name>
@@ -50,15 +50,6 @@
         </dependency>
 
         <!--Other tools-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

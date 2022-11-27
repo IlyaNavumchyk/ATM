@@ -100,7 +100,6 @@ public class SecurityManagerImpl implements SecurityManager, Exitable, ShutDowna
                 pinCode = reader.nextLine();
 
                 if (isExitChoice(pinCode)) {
-
                     break;
                 }
 
@@ -112,7 +111,7 @@ public class SecurityManagerImpl implements SecurityManager, Exitable, ShutDowna
             }
 
             if (!isInputCorrect) {
-                return isCardAuthenticate;
+                break;
             }
 
             try {
@@ -133,7 +132,7 @@ public class SecurityManagerImpl implements SecurityManager, Exitable, ShutDowna
 
     private void executeWhenPinCodeIsEnteredIncorrectly(Card card) throws InvalidlyCardDataException {
 
-        int countOfInvalidlyEnteredPinCode = card.getCountOfInvalidlyEnteredPinCode() + 1;
+        final int countOfInvalidlyEnteredPinCode = card.getCountOfInvalidlyEnteredPinCode() + 1;
 
         card.setCountOfInvalidlyEnteredPinCode(countOfInvalidlyEnteredPinCode);
         card.setLastDateInvalidlyEnteredPinCode(LocalDate.now());

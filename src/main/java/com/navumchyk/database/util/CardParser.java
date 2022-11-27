@@ -1,4 +1,4 @@
-package com.navumchyk.atm.util;
+package com.navumchyk.database.util;
 
 import com.navumchyk.domain.Card;
 import com.navumchyk.exception.DataLoadingError;

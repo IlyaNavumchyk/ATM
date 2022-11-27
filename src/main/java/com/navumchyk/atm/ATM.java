@@ -2,39 +2,48 @@ package com.navumchyk.atm;
 
 import com.navumchyk.Exitable;
 import com.navumchyk.config.ATMConfig;
+import com.navumchyk.database.DatabaseManager;
 import com.navumchyk.domain.Card;
 import com.navumchyk.exception.InvalidlyCardDataException;
 import com.navumchyk.exception.ShutDownException;
 import com.navumchyk.security.SecurityManager;
 import com.navumchyk.service.ServiceManager;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.navumchyk.atm.util.DatabaseLoader.loadDataFromDatabaseToFile;
-import static com.navumchyk.atm.util.DatabaseLoader.loadDataFromFileToDatabase;
 import static com.navumchyk.util.DelayUtil.makeDelayOfTwoSeconds;
 
 @Component
-@Data
 @Slf4j
 public class ATM implements Exitable {
 
-    private final ATMConfig config;
-    private final Map<String, Card> database = new HashMap<>();
-
+    private final DatabaseManager databaseManager;
     private final SecurityManager securityManager;
     private final ServiceManager serviceManager;
 
     private int atmBalance;
     private boolean isAtmWork;
 
+    @Autowired
+    private ATM(final DatabaseManager databaseManager, final SecurityManager securityManager,
+                final ServiceManager serviceManager, final ATMConfig config) {
+
+        this.databaseManager = databaseManager;
+        this.securityManager = securityManager;
+        this.serviceManager = serviceManager;
+        this.atmBalance = config.getBalance();
+        this.isAtmWork = true;
+    }
+
     public void start() {
+
+        log.warn("ATM has started working!");
+
+        var database = databaseManager.getDatabase();
 
         Card card;
         String userChoice;
@@ -53,6 +62,7 @@ public class ATM implements Exitable {
                 securityManager.checkCardForBlocking(card);
 
                 if (!securityManager.authenticateCardByPinCode(database)) {
+                    getFinishMessage();
                     continue;
                 }
 
@@ -76,21 +86,10 @@ public class ATM implements Exitable {
         }
     }
 
-    @PostConstruct
-    private void init() {
-
-        atmBalance = config.getBalance();
-        isAtmWork = true;
-        loadDataFromFileToDatabase(database, config.getFileName());
-        log.warn("ATM has started working!");
-    }
-
     @PreDestroy
     private void shutdown() {
 
-        loadDataFromDatabaseToFile(database, config.getFileName());
         log.warn("ATM has finished working!");
-
     }
 
     private void getFinishMessage() {

@@ -1,1 +1,1 @@
-java -jar ATM-1.0.0.jar
+java -jar target\ATM-1.0.1.jar
